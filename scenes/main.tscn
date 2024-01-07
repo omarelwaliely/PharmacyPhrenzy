@@ -1,0 +1,65 @@
+[gd_scene load_steps=7 format=3 uid="uid://b1ym07akk7p22"]
+
+[ext_resource type="Script" path="res://scripts/player.gd" id="1_7c7lk"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_y5vh7"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_goebu"]
+sky_material = SubResource("ProceduralSkyMaterial_y5vh7")
+
+[sub_resource type="Environment" id="Environment_fldhq"]
+background_mode = 2
+sky = SubResource("Sky_goebu")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_trncu"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_sf6dq"]
+radius = 0.25
+height = 1.2
+
+[node name="world" type="Node3D"]
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.016, 1.71219, 12.645)
+use_collision = true
+size = Vector3(20, 1, 20)
+
+[node name="enviroment" type="Node" parent="."]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="enviroment"]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="enviroment"]
+environment = SubResource("Environment_fldhq")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0.722)
+use_collision = true
+size = Vector3(20, 1, 20)
+
+[node name="player" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.013545, 0, 0)
+script = ExtResource("1_7c7lk")
+
+[node name="standing_collision_shape" type="CollisionShape3D" parent="player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_trncu")
+
+[node name="crouching_collision_shape" type="CollisionShape3D" parent="player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00492287, 1, -0.00213122)
+shape = SubResource("CapsuleShape3D_sf6dq")
+disabled = true
+
+[node name="head" type="Node3D" parent="player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.46262, 0)
+
+[node name="Camera3D" type="Camera3D" parent="player/head"]
+
+[node name="RayCast3D" type="RayCast3D" parent="player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00443876, -2.38419e-07, -0.00400877)
+target_position = Vector3(0, 2, 0)
